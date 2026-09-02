@@ -67,6 +67,43 @@ nvidia/Qwen3.6-35B-A3B-NVFP4
 
 Direct Office Wi-Fi access does not require an active SSH port-forwarding terminal.
 
+### Certificate Distribution for New Users
+
+> **Important:** A new employee must obtain the HTTPS certificate before opening LibreChat for the first time.
+
+The certificate is maintained on the DGX server at:
+
+```
+~/truviq-root-ca.crt
+```
+
+However, employees should not be required to SSH into the DGX server just to obtain the certificate.
+
+**The DGX administrator must copy the certificate to an approved internal distribution location** accessible to employees, such as:
+
+- Corporate OneDrive
+- SharePoint
+- Company shared network folder
+- Approved internal software distribution location
+
+The administrator distributes the certificate file to users with the filename:
+
+```
+aichat.truviq.crt
+```
+
+**New users must download this file and save it in their Windows Downloads folder before proceeding.**
+
+The expected location on the user's Windows laptop is:
+
+```
+C:\Users\<WindowsUsername>\Downloads\aichat.truviq.crt
+```
+
+> **Administrator responsibility:** Ensure that the certificate distributed to employees is the current certificate used by aichat.truviq.
+
+---
+
 ### Method A: PowerShell (Recommended)
 
 #### STEP 1: Add the DGX hostname
@@ -105,22 +142,36 @@ Confirm:
 TcpTestSucceeded : True
 ```
 
-#### STEP 4: Copy the certificate
+#### STEP 4: Download the certificate
 
-Copy this certificate from the DGX to the Windows laptop's Downloads folder:
+Download the LibreChat HTTPS certificate from the approved internal certificate distribution location provided by the DGX/IT administrator.
+
+Save the certificate in:
 
 ```
-~/truviq-root-ca.crt
+C:\Users\<WindowsUsername>\Downloads\
 ```
 
-The filename must be exactly: `truviq-root-ca.crt`
+The filename must be exactly:
+
+```
+aichat.truviq.crt
+```
+
+The complete expected path is:
+
+```
+C:\Users\<WindowsUsername>\Downloads\aichat.truviq.crt
+```
+
+> **Important:** Do not attempt to copy `~/truviq-root-ca.crt` directly unless you have authorized SSH access to the DGX. General LibreChat users should receive the certificate through the approved internal distribution location.
 
 #### STEP 5: Install the certificate
 
 Open PowerShell as Administrator:
 
 ```powershell
-certutil -addstore -f Root "$env:USERPROFILE\Downloads\truviq-root-ca.crt"
+Import-Certificate -FilePath "$env:USERPROFILE\Downloads\aichat.truviq.crt" -CertStoreLocation Cert:\LocalMachine\Root
 ```
 
 This installs the certificate into Trusted Root Certification Authorities.
@@ -128,6 +179,7 @@ This installs the certificate into Trusted Root Certification Authorities.
 #### STEP 6: Open LibreChat
 
 Navigate to:
+
 ```
 https://aichat.truviq
 ```
@@ -209,25 +261,36 @@ Confirm:
 TcpTestSucceeded : True
 ```
 
-#### STEP 6: Copy and Install the Certificate
+#### STEP 6: Download and Install the Certificate
 
-Copy this certificate from the DGX to the Windows laptop's Downloads folder:
+Download the LibreChat HTTPS certificate from the approved internal certificate distribution location provided by the DGX/IT administrator.
+
+Save the certificate in the Windows Downloads folder.
+
+The filename must be exactly:
 
 ```
-~/truviq-root-ca.crt
+aichat.truviq.crt
 ```
 
-The filename must be exactly: `truviq-root-ca.crt`
+The expected location is:
+
+```
+C:\Users\<WindowsUsername>\Downloads\aichat.truviq.crt
+```
 
 Open PowerShell as Administrator and install it:
 
 ```powershell
-certutil -addstore -f Root "$env:USERPROFILE\Downloads\truviq-root-ca.crt"
+Import-Certificate -FilePath "$env:USERPROFILE\Downloads\aichat.truviq.crt" -CertStoreLocation Cert:\LocalMachine\Root
 ```
+
+This installs the certificate into the Local Computer Trusted Root Certification Authorities store.
 
 #### STEP 7: Open LibreChat
 
 Navigate to:
+
 ```
 https://aichat.truviq
 ```
@@ -239,11 +302,13 @@ Sign in using the corporate OpenID account.
 ### Important Notes
 
 > **The Windows hosts entry must be exactly:** `192.168.0.143 aichat.truviq`
-> 
+>
 > - Do NOT add `:443` or another port to the hosts entry
 > - Do NOT add `https://` prefix
 > - HTTPS uses port 443 automatically
 > - Use Method B if Method A does not produce the expected output
+> - The certificate must be downloaded from the approved internal distribution location before attempting HTTPS access
+> - The certificate installation command must be run in PowerShell as Administrator
 
 ---
 
