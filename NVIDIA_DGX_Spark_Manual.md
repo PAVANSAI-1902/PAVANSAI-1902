@@ -229,25 +229,19 @@ ipconfig /flushdns
 
 ## 8. Enterprise Microservices & Ports
 
-Example:
-
-```bash
-ssh -L 28080:localhost:28080 truviq_domain@192.168.0.143
-```
-
-| SERVICE | PORT | LOCAL ACCESS |
-|---------|------|--------------|
-| LibreChat UI | 3080 | http://localhost:3080 |
-| LibreChat Admin | 3010 | http://localhost:3010 |
-| SearXNG Web Search | 28080 | http://localhost:28080 |
-| vLLM Qwen API | 8000 | http://localhost:8000/v1 |
-| Langfuse | 3000 | http://localhost:3000 |
-| LiteLLM | 4000 | http://localhost:4000 |
-| Phoenix | 6006 | http://localhost:6006 |
-| Temporal UI | 18080 | http://localhost:18080 |
-| Guardrails | 8010 | http://localhost:8010/health |
-| Agent Registry Ping | 12121 | http://localhost:12121/v0/ping |
-| Agent Registry MCP | 31313 | localhost:31313 |
+| SERVICE | PORT | LOCAL ACCESS URL | SSH TUNNEL COMMAND |
+|---------|------|------------------|--------------------|
+| Temporal UI | 18080 | http://localhost:18080 | `ssh -L 18080:localhost:18080 truviq_domain@192.168.0.143` |
+| LibreChat UI | 3080 | http://localhost:3080 | `ssh -L 3080:localhost:3080 truviq_domain@192.168.0.143` |
+| LibreChat Admin | 3010 | http://localhost:3010 | `ssh -L 3010:localhost:3010 truviq_domain@192.168.0.143` |
+| SearXNG Web Search | 28080 | http://localhost:28080 | `ssh -L 28080:localhost:28080 truviq_domain@192.168.0.143` |
+| vLLM Qwen API | 8000 | http://localhost:8000/v1 | `ssh -L 8000:localhost:8000 truviq_domain@192.168.0.143` |
+| Langfuse | 3000 | http://localhost:3000 | `ssh -L 3000:localhost:3000 truviq_domain@192.168.0.143` |
+| LiteLLM | 4000 | http://localhost:4000 | `ssh -L 4000:localhost:4000 truviq_domain@192.168.0.143` |
+| Phoenix | 6006 | http://localhost:6006 | `ssh -L 6006:localhost:6006 truviq_domain@192.168.0.143` |
+| Guardrails | 8010 | http://localhost:8010/health | `ssh -L 8010:localhost:8010 truviq_domain@192.168.0.143` |
+| Agent Registry Ping | 12121 | http://localhost:12121/v0/ping | `ssh -L 12121:localhost:12121 truviq_domain@192.168.0.143` |
+| Agent Registry MCP | 31313 | localhost:31313 | `ssh -L 31313:localhost:31313 truviq_domain@192.168.0.143` |
 
 ---
 
