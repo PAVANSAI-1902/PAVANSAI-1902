@@ -67,7 +67,9 @@ nvidia/Qwen3.6-35B-A3B-NVFP4
 
 Direct Office Wi-Fi access does not require an active SSH port-forwarding terminal.
 
-### STEP 1: Add the DGX hostname
+### Method A: PowerShell (Recommended)
+
+#### STEP 1: Add the DGX hostname
 
 Open PowerShell as Administrator:
 
@@ -86,13 +88,13 @@ Expected output:
 192.168.0.143 aichat.truviq
 ```
 
-### STEP 2: Flush DNS
+#### STEP 2: Flush DNS
 
 ```powershell
 ipconfig /flushdns
 ```
 
-### STEP 3: Test HTTPS connectivity
+#### STEP 3: Test HTTPS connectivity
 
 ```powershell
 Test-NetConnection aichat.truviq -Port 443
@@ -103,7 +105,7 @@ Confirm:
 TcpTestSucceeded : True
 ```
 
-### STEP 4: Copy the certificate
+#### STEP 4: Copy the certificate
 
 Copy this certificate from the DGX to the Windows laptop's Downloads folder:
 
@@ -113,7 +115,7 @@ Copy this certificate from the DGX to the Windows laptop's Downloads folder:
 
 The filename must be exactly: `truviq-root-ca.crt`
 
-### STEP 5: Install the certificate
+#### STEP 5: Install the certificate
 
 Open PowerShell as Administrator:
 
@@ -123,7 +125,7 @@ certutil -addstore -f Root "$env:USERPROFILE\Downloads\truviq-root-ca.crt"
 
 This installs the certificate into Trusted Root Certification Authorities.
 
-### STEP 6: Open LibreChat
+#### STEP 6: Open LibreChat
 
 Navigate to:
 ```
@@ -132,7 +134,116 @@ https://aichat.truviq
 
 Sign in using the corporate OpenID account.
 
-> **Important:** The Windows hosts entry must be `192.168.0.143 aichat.truviq`. Do not add `:443` or another port to the hosts entry. HTTPS uses port 443 automatically.
+---
+
+### Method B: Manual VS Code Editor (If PowerShell Method Fails)
+
+Use this method if the PowerShell commands in Method A do not produce the expected output or if you encounter permission issues.
+
+#### STEP 1: Open VS Code as Administrator
+
+- Close VS Code if it is already open
+- Search for **Visual Studio Code** in the Windows Start menu
+- Right-click **Visual Studio Code**
+- Select **Run as administrator**
+
+#### STEP 2: Open the Hosts File
+
+In VS Code:
+
+- Click **File** → **Open File**
+- Navigate to:
+  ```
+  C:\Windows\System32\drivers\etc
+  ```
+- If the `hosts` file is not visible, change the file type filter to **All Files** (click the filter dropdown in the bottom-right)
+- Select the file named:
+  ```
+  hosts
+  ```
+- Click **Open**
+
+#### STEP 3: Add the LibreChat Hostname
+
+- Go to the **last line** of the file
+- Add a new line with:
+  ```
+  192.168.0.143 aichat.truviq
+  ```
+
+> **Important:** The entry must be exactly `192.168.0.143 aichat.truviq` with a single space between the IP and hostname. Do not add `https://` or `:443`.
+
+#### STEP 4: Save the File
+
+- Press **Ctrl + S**
+
+Because VS Code was opened using **Run as administrator**, the file should save successfully.
+
+#### STEP 5: Flush DNS and Test
+
+Open PowerShell as Administrator and run:
+
+```powershell
+ipconfig /flushdns
+```
+
+Verify the entry:
+
+```powershell
+Get-Content "C:\Windows\System32\drivers\etc\hosts" | Select-String "aichat.truviq"
+```
+
+Expected output:
+```
+192.168.0.143 aichat.truviq
+```
+
+Test connectivity:
+
+```powershell
+Test-NetConnection aichat.truviq -Port 443
+```
+
+Confirm:
+```
+TcpTestSucceeded : True
+```
+
+#### STEP 6: Copy and Install the Certificate
+
+Copy this certificate from the DGX to the Windows laptop's Downloads folder:
+
+```
+~/truviq-root-ca.crt
+```
+
+The filename must be exactly: `truviq-root-ca.crt`
+
+Open PowerShell as Administrator and install it:
+
+```powershell
+certutil -addstore -f Root "$env:USERPROFILE\Downloads\truviq-root-ca.crt"
+```
+
+#### STEP 7: Open LibreChat
+
+Navigate to:
+```
+https://aichat.truviq
+```
+
+Sign in using the corporate OpenID account.
+
+---
+
+### Important Notes
+
+> **The Windows hosts entry must be exactly:** `192.168.0.143 aichat.truviq`
+> 
+> - Do NOT add `:443` or another port to the hosts entry
+> - Do NOT add `https://` prefix
+> - HTTPS uses port 443 automatically
+> - Use Method B if Method A does not produce the expected output
 
 ---
 
