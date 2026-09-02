@@ -421,35 +421,7 @@ ipconfig /flushdns
 
 ---
 
-## 9. Docker Administration
-
-Production services run in Docker on the DGX Spark.
-
-### LibreChat directory:
-
-```
-/home/truviq_domain/LibreChat
-```
-
-### Connect and inspect:
-
-```bash
-ssh truviq_domain@192.168.0.143
-docker ps
-docker ps --format "table {{.Names}}\t{{.Status}}"
-cd ~/LibreChat
-docker compose ps
-```
-
-### Verify listeners:
-
-```bash
-sudo ss -lntp | grep -E ':80|:443|:3080'
-```
-
----
-
-## 10. Quick Troubleshooting
+## 9. Quick Troubleshooting
 
 | PROBLEM | CHECK |
 |---------|-------|
@@ -461,7 +433,7 @@ sudo ss -lntp | grep -E ':80|:443|:3080'
 
 ---
 
-## 11. Employee Quick-Start
+## 10. Employee Quick-Start
 
 1. Connect to the company network and ensure 192.168.0.143 is reachable
 2. **HTTPS:** Install the certificate and hosts entry, then open https://aichat.truviq
